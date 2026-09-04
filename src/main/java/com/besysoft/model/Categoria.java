@@ -3,32 +3,33 @@ package com.besysoft.model;
 import java.util.Arrays;
 
 public enum Categoria {
-    TECNOLOGIA("Tecnología"),
-    ELECTRODOMESTICOS("Electrodomésticos"),
-    INDUMENTARIA("Indumentaria"),
-    HOGAR("Hogar"),
-    ALIMENTOS("Alimentos"),
-    LIMPIEZA("Limpieza"),
-    OTRO("Otro");
+    TECHNOLOGY("Technology"),
+    APPLIANCES("Appliances"),
+    CLOTHING("Clothing"),
+    HOME("Home"),
+    FOOD("Food"),
+    CLEANING("Cleaning"),
+    OTHER("Other");
 
-    private final String descripcion;
+    private final String description;
 
-    Categoria(String descripcion) {
-        this.descripcion = descripcion;
+    Categoria(String description) {
+        this.description = description;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public static Categoria buscarPorTexto(String texto) {
-        if (texto == null || texto.isBlank()) {
-            return OTRO;
+    public static Categoria searchByText(String text) {
+        if (text == null || text.isBlank()) {
+            return OTHER;
         }
+        String clean = text.trim();
         return Arrays.stream(values())
-                .filter(cat -> cat.name().equalsIgnoreCase(texto.trim()) ||
-                               cat.descripcion.equalsIgnoreCase(texto.trim()))
+                .filter(cat -> cat.name().equalsIgnoreCase(clean) ||
+                               cat.description.equalsIgnoreCase(clean))
                 .findFirst()
-                .orElse(OTRO);
+                .orElse(OTHER);
     }
 }

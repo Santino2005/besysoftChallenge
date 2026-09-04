@@ -75,6 +75,6 @@ public class Producto {
     @Override
     public String toString() {
         return String.format("[%s] %-20s | Categoría: %-16s | Precio: $%.2f",
-                codigo, nombre, categoria.getDescripcion(), precio);
+                codigo, nombre, categoria.getDescription(), precio);
     }
 }
