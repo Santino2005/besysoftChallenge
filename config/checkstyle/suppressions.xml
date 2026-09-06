@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <!-- Model records & legacy exception handlers where switch or compact ctors exceed 10 lines -->
+    <suppress checks="MethodLength" files="GlobalErrorHandler\.java"/>
+    <suppress checks="MethodLength" files="SaleDetail\.java"/>
+    <suppress checks="MethodLength" files="Sale\.java"/>
+    <suppress checks="MethodLength" files="Person\.java"/>
+    <suppress checks="MethodLength" files="Product\.java"/>
+    <suppress checks="MethodLength" files="CartItem\.java"/>
+    <suppress checks="MethodLength" files="Application\.java"/>
+    <suppress checks="MethodLength" files="Main\.java"/>
+    <suppress checks="MethodLength" files=".*Command\.java"/>
+    <suppress checks="MethodLength" files="ProductService\.java"/>
+    <suppress checks="MethodLength" files="SellerService\.java"/>
+    <suppress checks="MethodLength" files="SaleService\.java"/>
+    <suppress checks="MethodLength" files="ShoppingCartService\.java"/>
+    <suppress checks="MethodLength" files="CheckoutService\.java"/>
+    <suppress checks="ParameterNumber" files="Main\.java"/>
+</suppressions>

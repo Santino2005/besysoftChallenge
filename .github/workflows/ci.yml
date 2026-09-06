@@ -1,0 +1,66 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "feature/**", "develop", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: Build, Quality & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: 1. Check Code Formatting (Spotless)
+        run: ./gradlew spotlessCheck --no-daemon
+
+      - name: 2. Static Analysis (Checkstyle)
+        run: ./gradlew checkstyleMain --no-daemon
+
+      - name: 3. Execute Tests (Unit & Integration)
+        run: ./gradlew test --no-daemon
+
+      - name: 4. Verify JaCoCo Coverage (Min 80%)
+        run: ./gradlew jacocoTestReport jacocoTestCoverageVerification --no-daemon
+
+      - name: 5. Build Artifacts
+        run: ./gradlew assemble --no-daemon
+
+      - name: Upload Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: build/reports/tests/test/
+          retention-days: 14
+
+      - name: Upload JaCoCo Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/test/html/
+          retention-days: 14
+
+      - name: Upload Checkstyle Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: build/reports/checkstyle/
+          retention-days: 14

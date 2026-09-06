@@ -6,5 +6,3 @@ public record CorrectResult<T>(T value) implements Result<T> {
         return true;
     }
 }
-
-

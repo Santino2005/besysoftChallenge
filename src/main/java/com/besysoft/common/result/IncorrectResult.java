@@ -5,5 +5,3 @@ public record IncorrectResult<T>(String error) implements Result<T> {
         return false;
     }
 }
-
-

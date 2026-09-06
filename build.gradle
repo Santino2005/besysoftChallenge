@@ -1,6 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'com.besysoft'
@@ -27,8 +30,63 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+configurations.checkstyle {
+    exclude group: 'com.google.collections', module: 'google-collections'
+}
+
+checkstyle {
+    toolVersion = '10.14.0'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    ignoreFailures = false
+}
+
+checkstyleTest {
+    enabled = false
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+tasks.register('installGitHooks', Copy) {
+    from file('.githooks')
+    into file('.git/hooks')
+    fileMode 0755
 }
 
 run {

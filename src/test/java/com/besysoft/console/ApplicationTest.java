@@ -1,9 +1,5 @@
 package com.besysoft.console;
 
-import com.besysoft.common.result.CorrectResult;
-import com.besysoft.common.result.Result;
-import com.besysoft.model.person.Seller;
-import com.besysoft.model.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

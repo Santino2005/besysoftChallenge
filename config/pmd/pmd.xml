@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>Reglas de PMD: no magic numbers, no wildcard imports, max 10 lineas x metodo, max 4 atributos/parametros x metodo</description>
+
+    <!-- 1. No imports with * -->
+    <rule ref="category/java/codestyle.xml/WildcardImports"/>
+
+    <!-- 2. No magic numbers -->
+    <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition"/>
+
+    <!-- 3. Maximo 10 lineas por metodo -->
+    <rule ref="category/java/design.xml/ExcessiveMethodLength">
+        <properties>
+            <property name="minimum" value="11.0"/>
+        </properties>
+    </rule>
+
+    <!-- 4. Maximo 4 atributos/parametros por metodo -->
+    <rule ref="category/java/design.xml/ExcessiveParameterList">
+        <properties>
+            <property name="minimum" value="5.0"/>
+        </properties>
+    </rule>
+</ruleset>

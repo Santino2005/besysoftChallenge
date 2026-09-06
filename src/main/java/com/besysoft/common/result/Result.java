@@ -11,5 +11,3 @@ public sealed interface Result<T> permits CorrectResult, IncorrectResult {
         return new IncorrectResult<>(error);
     }
 }
-
-

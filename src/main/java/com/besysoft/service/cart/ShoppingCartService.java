@@ -7,7 +7,6 @@ import com.besysoft.common.result.IncorrectResult;
 import com.besysoft.common.result.Result;
 import com.besysoft.model.cart.ShoppingCart;
 import com.besysoft.model.product.Product;
-import com.besysoft.repository.product.ProductRepository;
 import com.besysoft.service.product.ProductService;
 
 import java.util.UUID;

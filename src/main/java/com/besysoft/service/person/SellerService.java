@@ -1,6 +1,7 @@
 package com.besysoft.service.person;
 
 import com.besysoft.common.errorHandler.GlobalErrorHandler;
+import com.besysoft.common.errorHandler.person.InvalidPersonException;
 import com.besysoft.common.errorHandler.person.InvalidSellerException;
 import com.besysoft.common.result.Result;
 import com.besysoft.model.person.Seller;
@@ -34,7 +35,7 @@ public class SellerService {
                     sellerRepository.save(seller)
             );
 
-        } catch (InvalidSellerException ex) {
+        } catch (InvalidSellerException | InvalidPersonException ex) {
             return GlobalErrorHandler.handleAsResult(ex);
         }
     }

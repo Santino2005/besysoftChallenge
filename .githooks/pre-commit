@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+echo "=== [Pre-commit] 1. Formateando código con Spotless... ==="
+./gradlew spotlessApply --daemon
+
+echo "=== [Pre-commit] 2. Actualizando archivos en el stage de git... ==="
+git update-index --again
+
+echo "=== [Pre-commit] 3. Ejecutando chequeos de código (Checkstyle y SpotlessCheck)... ==="
+./gradlew checkstyleMain spotlessCheck --daemon
+
+echo "=== [Pre-commit] Verificaciones superadas con éxito. Procediendo con el commit. ==="

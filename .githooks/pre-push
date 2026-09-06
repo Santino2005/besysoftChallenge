@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+echo "=== [Pre-push] 1. Ejecutando tests unitarios y de integración... ==="
+./gradlew test --daemon
+
+echo "=== [Pre-push] 2. Generando reporte y verificando cobertura mínima del 80% (JaCoCo)... ==="
+./gradlew jacocoTestReport jacocoTestCoverageVerification --daemon
+
+echo "=== [Pre-push] Tests y regla del 80% de cobertura superados con éxito. Procediendo con el push. ==="
