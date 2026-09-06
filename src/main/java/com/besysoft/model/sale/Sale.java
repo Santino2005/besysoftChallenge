@@ -3,6 +3,7 @@ package com.besysoft.model.sale;
 import com.besysoft.common.errorHandler.sale.InvalidSaleException;
 import com.besysoft.model.person.Seller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,27 @@ public class Sale {
             );
         }
         details.add(detail);
+    }
+
+    public int totalProducts() {
+        int total = 0;
+        for (SaleDetail detail : details) {
+            total += detail.quantity();
+        }
+        return total;
+    }
+
+    public BigDecimal totalAmount() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (SaleDetail detail : details) {
+            BigDecimal detailTotal =
+                    detail.unitPrice()
+                            .multiply(BigDecimal.valueOf(detail.quantity()));
+
+            total = total.add(detailTotal);
+        }
+        return total;
     }
 
     @Override

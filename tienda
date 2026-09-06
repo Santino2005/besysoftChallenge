@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# ==============================================================================
+# Script configurable para ejecutar la CLI de Tienda
+# Soporta tanto Main (ejecución directa de comandos PicoCLI)
+# como Application (consola interactiva REPL con memoria de sesión).
+#
+# Uso:
+#   ./tienda                    -> Inicia modo interactivo (Application)
+#   ./tienda product list       -> Ejecuta comando directo (Main)
+#   ./tienda -i / --interactive -> Fuerza modo interactivo (Application)
+#   ./tienda -b / --batch <cmd> -> Fuerza ejecución directa (Main)
+#   ENTRY=Application ./tienda  -> Configurable mediante variable de entorno
+# ==============================================================================
+
+ENTRY="${ENTRY:-${TIENDA_ENTRY:-}}"
+
+if [ "$1" = "-i" ] || [ "$1" = "--interactive" ]; then
+    ENTRY="com.besysoft.console.Application"
+    shift
+elif [ "$1" = "-b" ] || [ "$1" = "--batch" ]; then
+    ENTRY="com.besysoft.console.Main"
+    shift
+fi
+
+# Selección por defecto si no se especificó:
+if [ -z "$ENTRY" ]; then
+    if [ $# -eq 0 ]; then
+        ENTRY="com.besysoft.console.Application"
+    else
+        ENTRY="com.besysoft.console.Main"
+    fi
+fi
+
+# Expandir nombre corto si se pasó solo "Main" o "Application"
+if [ "$ENTRY" = "Main" ]; then
+    ENTRY="com.besysoft.console.Main"
+elif [ "$ENTRY" = "Application" ]; then
+    ENTRY="com.besysoft.console.Application"
+fi
+
+if [ $# -eq 0 ]; then
+    "$SCRIPT_DIR/gradlew" -p "$SCRIPT_DIR" -q run --console=plain -PmainClass="$ENTRY"
+else
+    "$SCRIPT_DIR/gradlew" -p "$SCRIPT_DIR" -q run --console=plain -PmainClass="$ENTRY" --args="$*"
+fi

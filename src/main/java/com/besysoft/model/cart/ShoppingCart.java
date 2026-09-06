@@ -41,4 +41,8 @@ public class ShoppingCart {
         CartItem item = new CartItem(product, quantity);
         items.put(product.productId(), item);
     }
+
+    public void clear() {
+        items.clear();
+    }
 }

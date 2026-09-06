@@ -48,6 +48,10 @@ public class GlobalErrorHandler {
                     "ILLEGAL_ARGUMENT",
                     ex.getMessage()
             );
+            case IllegalStateException ex -> response(
+                    "INVALID_COMMISSION_CONFIGURATION",
+                    ex.getMessage()
+            );
             case null -> response(
                     "UNKNOWN_ERROR",
                     "Ha ocurrido un error inesperado (null)."
