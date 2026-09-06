@@ -5,18 +5,70 @@
 El siguiente diagrama representa el modelo de datos utilizado para gestionar
 productos, vendedores y ventas.
 
-![Diagrama Entidad-Relación](./erd.png)
+![Diagrama Entidad-Relación](./ERDIAGRAM.jpg)
+
+```mermaid
+erDiagram
+    SELLER ||--o{ SALE : "realiza (1:N)"
+    SALE ||--|{ SALE_DETAIL : "contiene (1:N)"
+    PRODUCT ||--o{ SALE_DETAIL : "es referenciado en (1:N)"
+    SHOPPING_CART ||--o{ CART_ITEM : "contiene (1:N)"
+    PRODUCT ||--o{ CART_ITEM : "se agrega a (1:N)"
+
+    SELLER {
+        UUID id PK "Identificador único (personId)"
+        VARCHAR code UK "Código único de vendedor"
+        VARCHAR name "Nombre del vendedor"
+        DECIMAL salary "Sueldo base (salary >= 0)"
+    }
+
+    PRODUCT {
+        UUID id PK "Identificador único (productId)"
+        VARCHAR code UK "Código único de producto"
+        VARCHAR name "Nombre del producto"
+        DECIMAL price "Precio unitario (price >= 0)"
+        VARCHAR category "Categoría (ENUM)"
+    }
+
+    SALE {
+        UUID id PK "Identificador único de venta (saleId)"
+        UUID seller_id FK "Vendedor que realizó la venta"
+        TIMESTAMP date "Fecha y hora de registro"
+    }
+
+    SALE_DETAIL {
+        UUID id PK "Identificador de línea (saleDetailId)"
+        UUID sale_id FK "Venta asociada"
+        UUID product_id FK "Producto vendido"
+        INT quantity "Cantidad vendida (quantity > 0)"
+        DECIMAL unit_price "Precio unitario histórico (unit_price >= 0)"
+    }
+
+    SHOPPING_CART {
+        UUID id PK "Identificador de sesión de carrito"
+        TIMESTAMP created_at "Fecha y hora de creación"
+    }
+
+    CART_ITEM {
+        UUID id PK "Identificador de ítem"
+        UUID cart_id FK "Carrito asociado"
+        UUID product_id FK "Producto referenciado"
+        INT quantity "Cantidad de unidades (quantity > 0)"
+    }
+```
 
 ---
 
 ## Modelos
 
-El modelo está compuesto por cuatro entidades principales:
+El modelo de dominio relacional está compuesto por las siguientes entidades:
 
 - `product`: representa los productos disponibles para la venta.
 - `seller`: representa a los vendedores que realizan las ventas.
-- `sale`: representa una operación de venta realizada por un vendedor.
+- `sale`: representa una operación de venta confirmada.
 - `sale_detail`: representa el detalle de los productos incluidos en una venta.
+- `shopping_cart`: representa la sesión de compra previa a la confirmación de la venta.
+- `cart_item`: representa cada producto y cantidad acumulada dentro de un carrito.
 
 ### Product
 
@@ -87,8 +139,28 @@ Un producto puede aparecer en múltiples detalles de diferentes ventas.
 Product 1 ─────────── N Sale Detail
 ```
 
+### Shopping Cart → Cart Item
+
+La relación entre `shopping_cart` y `cart_item` es **1:N**.
+
+Un carrito de compras contiene uno o más ítems seleccionados.
+
+```text
+ShoppingCart 1 ─────────── N CartItem
+```
+
+### Product → Cart Item
+
+La relación entre `product` y `cart_item` es **1:N**.
+
+Un producto puede ser agregado a múltiples carritos de compras.
+
+```text
+Product 1 ─────────── N CartItem
+```
+
 ---
 
 ## Esquema SQL DDL
 
-El esquema relacional correspondiente se encuentra definido en [`src/main/resources/schema.sql`](../src/main/resources/schema.sql).
+El esquema relacional correspondiente se encuentra definido en [`/documents/schema.sql`](../src/main/resources/schema.sql).

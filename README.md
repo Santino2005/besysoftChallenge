@@ -169,6 +169,11 @@ Tambien es posible reejecutar el seed en cualquier momento ingresando el comando
   - `CI Pipeline` (`.github/workflows/ci.yml`): Construccion, validacion de estilo, pruebas y generacion de reportes en cada push y PR.
   - `PR Title Check` (`.github/workflows/pr-title.yml`): Valida que los titulos de Pull Request comiencen con el prefijo `feat` (ejemplo: `feat: ...`, `feat(scope): ...`, `feat/...`).
 
+Para documentacion detallada:
+- Estandares de Linteo, Formateo y Analisis Estatico: [config/README.md](config/README.md)
+- Guia y Funcionamiento de Git Hooks: [.githooks/README.md](.githooks/README.md)
+- Workflows y Automatizaciones de CI: [.github/workflows/README.md](.github/workflows/README.md)
+
 Para activar los Git Hooks locales:
 ```bash
 ./gradlew installGitHooks
