@@ -1,7 +1,5 @@
 # Sistema de Gestion de Ventas - Besysoft Challenge
 
-[![CI Pipeline](https://github.com/Santino2005/besysoftChallenge/actions/workflows/ci.yml/badge.svg)](https://github.com/Santino2005/besysoftChallenge/actions/workflows/ci.yml)
-
 Solucion desarrollada en Java 21 para el challenge tecnico de Besysoft. Corresponde a una aplicacion de consola orientada a objetos para la administracion de una tienda comercial: gestion de catalogo de productos, registro de vendedores, carrito de compras, realizacion de ventas y calculo de comisiones segun politicas comerciales.
 
 ---
@@ -122,13 +120,13 @@ Permite ejecutar un comando puntual y retornar a la terminal del sistema operati
 | | `seller find-by-id` | `--id` | Busca un vendedor por su UUID |
 | | `seller find-by-code` | `--code` | Busca un vendedor por su codigo |
 | | `seller delete` | `--id` | Elimina un vendedor por su UUID |
-| **cart** | `cart add` | `--product-id`, `-q` (cantidad) | Agrega productos al carrito de la sesion |
+| **cart** | `cart add` | `--code` (o `-c`) / `--product-id`, `-q` (cantidad) | Agrega productos al carrito por codigo o ID |
 | | `cart list` | Ninguno | Muestra los productos y totales del carrito |
 | | `cart clear` | Ninguno | Vacia todos los productos del carrito |
-| **sale** | `sale checkout` | `--seller-id` | Finaliza la compra y asocia la venta al vendedor |
+| **sale** | `sale checkout` | `--code` (o `-s`) / `--seller-id` | Finaliza la compra y asocia la venta al vendedor |
 | | `sale list` | Ninguno | Muestra todas las ventas realizadas |
 | | `sale find-by-id` | `--id` | Muestra el comprobante detallado de una venta |
-| **commission**| `commission calculate` | `--seller-id` | Calcula la comision acumulada del vendedor |
+| **commission**| `commission calculate` | `--code` (o `-s`) / `--seller-id` | Calcula la comision acumulada del vendedor |
 | **seed** | `seed` | Ninguno | Recarga los datos iniciales de prueba en memoria |
 | **ayuda** | `--help` o `-h` | Ninguno | Despliega el manual de ayuda de cualquier comando |
 | **salida** | `exit` o `quit` | Ninguno | Finaliza la sesion de consola interactiva |

@@ -24,8 +24,11 @@ public class CommissionCalculateCommand implements Runnable {
     private final SaleService saleService;
     private final CommissionCalculator commissionCalculator;
 
-    @Option(names = {"--seller-id"}, required = true, description = "ID del vendedor (UUID)")
+    @Option(names = {"--seller-id"}, description = "ID del vendedor (UUID)")
     private UUID sellerId;
+
+    @Option(names = {"-s", "--seller-code", "--code"}, description = "Código del vendedor")
+    private String sellerCode;
 
     public CommissionCalculateCommand(SellerService sellerService,
                                       SaleService saleService,
@@ -37,14 +40,21 @@ public class CommissionCalculateCommand implements Runnable {
 
     @Override
     public void run() {
+        if (sellerCode == null && sellerId == null) {
+            System.out.println("Debe especificar el ID (--seller-id) o el código (--code / --seller-code) del vendedor.");
+            return;
+        }
+
         try {
-            Result<Seller> sellerResult = sellerService.findById(sellerId);
+            Result<Seller> sellerResult = (sellerCode != null)
+                    ? sellerService.findByCode(sellerCode)
+                    : sellerService.findById(sellerId);
             switch (sellerResult) {
                 case IncorrectResult<Seller> incorrect ->
                         System.out.println("Error: " + incorrect.error());
                 case CorrectResult<Seller> correct -> {
                     Seller seller = correct.value();
-                    List<Sale> sales = saleService.findBySellerId(sellerId);
+                    List<Sale> sales = saleService.findBySellerId(seller.personId());
                     BigDecimal totalCommission = commissionCalculator.calculateTotal(sales);
 
                     System.out.println("========================================");

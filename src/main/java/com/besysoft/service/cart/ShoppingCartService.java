@@ -41,6 +41,28 @@ public class ShoppingCartService {
         };
     }
 
+    public Result<Void> addItemByCode(
+            ShoppingCart cart,
+            String code,
+            int quantity
+    ) {
+        Result<Product> productResult = productService.findByCode(code);
+        return switch (productResult) {
+            case IncorrectResult<Product> incorrect ->
+                    Result.failure(incorrect.error());
+
+            case CorrectResult<Product> correct -> {
+                try {
+                    cart.addItem(correct.value(), quantity);
+                    yield Result.success(null);
+
+                } catch (InvalidCartItemException ex) {
+                    yield GlobalErrorHandler.handleAsResult(ex);
+                }
+            }
+        };
+    }
+
     public Result<ShoppingCart> clear(ShoppingCart cart) {
         if (cart == null) {
             return Result.failure(
