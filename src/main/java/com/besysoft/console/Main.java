@@ -59,36 +59,29 @@ public class Main {
     }
 
     public static CommandLine createDefaultCommandLine() {
-        // 1. Crear repositories
         ProductRepository productRepository = new InMemoryProductRepository();
         SellerRepository sellerRepository = new InMemorySellerRepository();
         SaleRepository saleRepository = new InMemorySaleRepository();
 
-        // 2. Crear services
         CategoryService categoryService = new CategoryService();
         ProductService productService = new ProductService(categoryService, productRepository);
         SellerService sellerService = new SellerService(sellerRepository);
         ShoppingCartService shoppingCartService = new ShoppingCartService(productService);
 
-        // 3. Crear strategies/rules necesarias
         List<CommissionRule> commissionRules = List.of(
                 new UpToTwoProductsRule(),
                 new MoreThanTwoProductsRule(),
                 new NoCommissionRule()
         );
 
-        // 4. Crear CommissionCalculator
         CommissionCalculator commissionCalculator = new CommissionCalculator(commissionRules);
 
-        // 5. Crear CheckoutService
         PricingService pricingService = new PricingService(List.of());
         SaleService saleService = new SaleService(sellerService, saleRepository);
         CheckoutService checkoutService = new CheckoutService(saleService, pricingService, commissionCalculator);
 
-        // 6. Crear una única instancia de ShoppingCart para la sesión
         ShoppingCart currentCart = new ShoppingCart();
 
-        // 7. Crear/configurar PicoCLI
         return createCommandLine(
                 productService,
                 categoryService,

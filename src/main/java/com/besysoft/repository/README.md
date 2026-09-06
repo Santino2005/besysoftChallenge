@@ -113,12 +113,12 @@ Se crea un repository cuando el objeto:
 Por eso:
 
 ```text
-Product       → Repository ✅
-Seller        → Repository ✅
-Sale          → Repository ✅
+Product       -> Repository (Aplica)
+Seller        -> Repository (Aplica)
+Sale          -> Repository (Aplica)
 
-ShoppingCart  → Repository ❌
-SaleDetail    → Repository ❌
+ShoppingCart  -> Repository (No aplica)
+SaleDetail    -> Repository (No aplica)
 ```
 
 `ShoppingCart` y `SaleDetail` continúan formando parte del modelo de dominio, pero su ciclo de vida depende de otras entidades y no requieren almacenamiento independiente para cumplir con la consigna.

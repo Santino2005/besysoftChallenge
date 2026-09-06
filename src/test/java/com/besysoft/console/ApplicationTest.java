@@ -32,7 +32,7 @@ class ApplicationTest {
 
     @Test
     void testCompleteFlow() {
-        // 1. Crear productos
+        // Crear productos
         app.run(new String[]{"product", "create", "--code", "P001", "--name", "Coca Cola", "--price", "1500", "--category", "FOOD"});
         String output1 = getAndResetOutput();
         assertTrue(output1.contains("Producto creado exitosamente."));
@@ -41,34 +41,34 @@ class ApplicationTest {
         app.run(new String[]{"product", "create", "--code", "P002", "--name", "Laptop Gamer", "--price", "2000000", "--category", "TECHNOLOGY"});
         assertTrue(getAndResetOutput().contains("Laptop Gamer"));
 
-        // 2. Listar productos
+        // Listar productos
         app.run(new String[]{"product", "list"});
         String listOut = getAndResetOutput();
         assertTrue(listOut.contains("Coca Cola"));
         assertTrue(listOut.contains("Laptop Gamer"));
 
-        // 3. Buscar producto por categoría
+        // Buscar producto por categoría
         app.run(new String[]{"product", "find-by-category", "--category", "FOOD"});
         String catOut = getAndResetOutput();
         assertTrue(catOut.contains("Coca Cola"));
 
-        // 4. Buscar producto por código
+        // Buscar producto por código
         app.run(new String[]{"product", "find-by-code", "--code", "P001"});
         String codeOut = getAndResetOutput();
         assertTrue(codeOut.contains("Coca Cola"));
 
-        // 5. Crear vendedor
+        // Crear vendedor
         app.run(new String[]{"seller", "create", "--code", "V001", "--name", "Juan Perez", "--salary", "500000"});
         String sellerOut = getAndResetOutput();
         assertTrue(sellerOut.contains("Vendedor creado exitosamente."));
         assertTrue(sellerOut.contains("Juan Perez"));
 
-        // 6. Listar vendedores
+        // Listar vendedores
         app.run(new String[]{"seller", "list"});
         String sellersOut = getAndResetOutput();
         assertTrue(sellersOut.contains("Juan Perez"));
 
-        // 7. Error de producto inexistente al agregar al carrito
+        // Validación de producto inexistente al agregar al carrito
         UUID nonExistentId = UUID.randomUUID();
         app.run(new String[]{"cart", "add", "--product-id", nonExistentId.toString(), "--quantity", "2"});
         String cartError = getAndResetOutput();

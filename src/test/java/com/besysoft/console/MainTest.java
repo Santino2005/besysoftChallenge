@@ -32,7 +32,7 @@ class MainTest {
 
     @Test
     void testMainCommandExecutionFlow() {
-        // 1. Crear producto con Main
+        // Crear producto
         int exitCode1 = Main.execute(cmd, "product", "create", "--code", "P001", "--name", "Coca Cola", "--price", "1500", "--category", "FOOD");
         assertEquals(0, exitCode1);
         String outProduct = getAndResetOutput();
@@ -42,19 +42,19 @@ class MainTest {
         int idIdx = outProduct.indexOf("ID:        ") + 11;
         UUID productId = UUID.fromString(outProduct.substring(idIdx, idIdx + 36).trim());
 
-        // 2. Listar productos
+        // Listar productos
         int exitCode2 = Main.execute(cmd, "product", "list");
         assertEquals(0, exitCode2);
         assertTrue(getAndResetOutput().contains("Coca Cola"));
 
-        // 3. Buscar por código y por categoría
+        // Buscar por código y por categoría
         Main.execute(cmd, "product", "find-by-code", "--code", "P001");
         assertTrue(getAndResetOutput().contains("Coca Cola"));
 
         Main.execute(cmd, "product", "find-by-category", "--category", "FOOD");
         assertTrue(getAndResetOutput().contains("Coca Cola"));
 
-        // 4. Crear vendedor
+        // Crear vendedor
         int exitCodeSeller = Main.execute(cmd, "seller", "create", "--code", "V001", "--name", "Carlos Lopez", "--salary", "550000");
         assertEquals(0, exitCodeSeller);
         String outSeller = getAndResetOutput();
@@ -63,43 +63,43 @@ class MainTest {
         int sellerIdIdx = outSeller.indexOf("ID:     ") + 8;
         UUID sellerId = UUID.fromString(outSeller.substring(sellerIdIdx, sellerIdIdx + 36).trim());
 
-        // 5. Listar vendedores
+        // Listar vendedores
         Main.execute(cmd, "seller", "list");
         assertTrue(getAndResetOutput().contains("Carlos Lopez"));
 
-        // 6. Error producto inexistente en carrito
+        // Error producto inexistente en carrito
         Main.execute(cmd, "cart", "add", "--product-id", UUID.randomUUID().toString(), "--quantity", "1");
         assertTrue(getAndResetOutput().contains("No se encontró un producto con este id"));
 
-        // 7. Agregar producto existente al carrito (2 unidades -> 5% comisión)
+        // Agregar producto existente al carrito (2 unidades -> 5% comisión)
         Main.execute(cmd, "cart", "add", "--product-id", productId.toString(), "--quantity", "2");
         assertTrue(getAndResetOutput().contains("Producto agregado al carrito exitosamente."));
 
-        // 8. Listar carrito
+        // Listar carrito
         Main.execute(cmd, "cart", "list");
         String cartList = getAndResetOutput();
         assertTrue(cartList.contains("Coca Cola"));
         assertTrue(cartList.contains("Total de unidades: 2"));
 
-        // 9. Checkout
+        // Checkout
         Main.execute(cmd, "sale", "checkout", "--seller-id", sellerId.toString());
         String checkoutOut = getAndResetOutput();
         assertTrue(checkoutOut.contains("VENTA REGISTRADA EXITOSAMENTE"));
         assertTrue(checkoutOut.contains("Total:          $3000,00") || checkoutOut.contains("Total:          $3000.00"));
         assertTrue(checkoutOut.contains("Comisión:       $150,00") || checkoutOut.contains("Comisión:       $150.00"));
 
-        // 10. Carrito vacío tras checkout
+        // Carrito vacío tras checkout
         Main.execute(cmd, "cart", "list");
         assertTrue(getAndResetOutput().contains("El carrito de compras está vacío."));
 
-        // 11. Calcular comisión
+        // Calcular comisión
         Main.execute(cmd, "commission", "calculate", "--seller-id", sellerId.toString());
         String commOut = getAndResetOutput();
         assertTrue(commOut.contains("CÁLCULO DE COMISIÓN"));
         assertTrue(commOut.contains("Carlos Lopez"));
         assertTrue(commOut.contains("$150,00") || commOut.contains("$150.00"));
 
-        // 12. Listar ventas
+        // Listar ventas
         Main.execute(cmd, "sale", "list");
         assertTrue(getAndResetOutput().contains("Carlos Lopez"));
     }
