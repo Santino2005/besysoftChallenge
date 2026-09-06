@@ -59,6 +59,7 @@ public class Application implements CommandLine.IFactory {
     private final CheckoutService checkoutService;
 
     private final CommandLine commandLine;
+    private final DataSeeder dataSeeder;
 
     public Application() {
         this.productRepository = new ProductRepository();
@@ -82,6 +83,9 @@ public class Application implements CommandLine.IFactory {
         this.pricingService = new PricingService(List.of());
         this.saleService = new SaleService(this.sellerService, this.saleRepository);
         this.checkoutService = new CheckoutService(this.saleService, this.pricingService, this.commissionCalculator);
+
+        this.dataSeeder = new DataSeeder(this.productService, this.sellerService);
+        this.dataSeeder.seed();
 
         this.commandLine = new CommandLine(new MainCommand(), this);
     }
@@ -146,6 +150,10 @@ public class Application implements CommandLine.IFactory {
 
         if (cls == CommissionCalculateCommand.class) {
             return (K) new CommissionCalculateCommand(sellerService, saleService, commissionCalculator);
+        }
+
+        if (cls == SeedCommand.class) {
+            return (K) new SeedCommand(dataSeeder);
         }
 
         return CommandLine.defaultFactory().create(cls);

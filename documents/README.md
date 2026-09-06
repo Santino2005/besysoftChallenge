@@ -5,7 +5,7 @@
 El siguiente diagrama representa el modelo de datos utilizado para gestionar
 productos, vendedores y ventas.
 
-![Diagrama Entidad-Relación](./documents/erd.png)
+![Diagrama Entidad-Relación](./erd.png)
 
 ---
 
@@ -65,3 +65,30 @@ un único vendedor.
 
 ```text
 Seller 1 ─────────── N Sale
+```
+
+### Sale → Sale Detail
+
+La relación entre `sale` y `sale_detail` es **1:N**.
+
+Una venta contiene una o más líneas de detalle, y cada detalle pertenece a una única venta.
+
+```text
+Sale 1 ─────────── N Sale Detail
+```
+
+### Product → Sale Detail
+
+La relación entre `product` y `sale_detail` es **1:N**.
+
+Un producto puede aparecer en múltiples detalles de diferentes ventas.
+
+```text
+Product 1 ─────────── N Sale Detail
+```
+
+---
+
+## Esquema SQL DDL
+
+El esquema relacional correspondiente se encuentra definido en [`src/main/resources/schema.sql`](../src/main/resources/schema.sql).

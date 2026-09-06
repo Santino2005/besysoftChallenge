@@ -19,6 +19,7 @@ import picocli.CommandLine.Command;
                 CartCommand.class,
                 SaleCommand.class,
                 CommissionCommand.class,
+                SeedCommand.class,
                 CommandLine.HelpCommand.class
         }
 )
