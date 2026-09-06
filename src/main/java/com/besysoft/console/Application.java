@@ -19,8 +19,11 @@ import com.besysoft.console.seller.SellerFindByCodeCommand;
 import com.besysoft.console.seller.SellerFindByIdCommand;
 import com.besysoft.console.seller.SellerListCommand;
 import com.besysoft.model.cart.ShoppingCart;
+import com.besysoft.repository.person.InMemorySellerRepository;
 import com.besysoft.repository.person.SellerRepository;
+import com.besysoft.repository.product.InMemoryProductRepository;
 import com.besysoft.repository.product.ProductRepository;
+import com.besysoft.repository.sale.InMemorySaleRepository;
 import com.besysoft.repository.sale.SaleRepository;
 import com.besysoft.service.cart.ShoppingCartService;
 import com.besysoft.service.checkout.CheckoutService;
@@ -62,9 +65,9 @@ public class Application implements CommandLine.IFactory {
     private final DataSeeder dataSeeder;
 
     public Application() {
-        this.productRepository = new ProductRepository();
-        this.sellerRepository = new SellerRepository();
-        this.saleRepository = new SaleRepository();
+        this.productRepository = new InMemoryProductRepository();
+        this.sellerRepository = new InMemorySellerRepository();
+        this.saleRepository = new InMemorySaleRepository();
 
         this.categoryService = new CategoryService();
         this.productService = new ProductService(this.categoryService, this.productRepository);

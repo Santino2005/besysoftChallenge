@@ -1,0 +1,22 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  validate-pr-title:
+    name: Validate PR Title Matches Feat
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify PR title begins with feat
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          echo "Analyzing PR title: '$TITLE'"
+          PATTERN="^(feat|Feat|FEAT)([/: ( -].*)?$"
+          if [[ ! "$TITLE" =~ $PATTERN ]]; then
+            echo "::error::El titulo del Pull Request debe comenzar con 'feat' (por ejemplo: 'feat: nueva funcionalidad', 'feat(modulo): descripcion' o 'feat/...'). Titulo recibido: '$TITLE'"
+            exit 1
+          fi
+          echo "Titulo de Pull Request valido."
