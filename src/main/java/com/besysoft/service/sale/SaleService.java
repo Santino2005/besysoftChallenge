@@ -52,6 +52,20 @@ public class SaleService {
         };
     }
 
+    public Result<Sale> registerSaleBySellerCode(
+            ShoppingCart cart,
+            String sellerCode
+    ) {
+        if (sellerCode == null || sellerCode.isBlank()) {
+            return Result.failure("El código del vendedor no puede ser nulo o vacío.");
+        }
+        Result<Seller> sellerResult = sellerService.findByCode(sellerCode);
+        return switch (sellerResult) {
+            case IncorrectResult<Seller> incorrect -> Result.failure(incorrect.error());
+            case CorrectResult<Seller> correct -> registerSale(cart, correct.value().personId());
+        };
+    }
+
     private Result<Seller> validateCart(ShoppingCart cart, UUID sellerId) {
         if (cart == null) {
             return Result.failure(

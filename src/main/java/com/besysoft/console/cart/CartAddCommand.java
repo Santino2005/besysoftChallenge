@@ -19,8 +19,11 @@ public class CartAddCommand implements Runnable {
     private final ShoppingCartService shoppingCartService;
     private final ShoppingCart cart;
 
-    @Option(names = {"--product-id"}, required = true, description = "ID del producto (UUID)")
+    @Option(names = {"--product-id"}, description = "ID del producto (UUID)")
     private UUID productId;
+
+    @Option(names = {"-c", "--code"}, description = "Código del producto")
+    private String code;
 
     @Option(names = {"-q", "--quantity"}, required = true, description = "Cantidad a agregar")
     private int quantity;
@@ -32,8 +35,15 @@ public class CartAddCommand implements Runnable {
 
     @Override
     public void run() {
+        if (code == null && productId == null) {
+            System.out.println("Debe especificar el ID (--product-id) o el código (--code) del producto.");
+            return;
+        }
+
         try {
-            Result<Void> result = shoppingCartService.addItem(cart, productId, quantity);
+            Result<Void> result = (code != null)
+                    ? shoppingCartService.addItemByCode(cart, code, quantity)
+                    : shoppingCartService.addItem(cart, productId, quantity);
             switch (result) {
                 case IncorrectResult<Void> incorrect ->
                         System.out.println("Error al agregar al carrito: " + incorrect.error());

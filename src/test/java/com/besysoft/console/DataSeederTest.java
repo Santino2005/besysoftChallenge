@@ -1,6 +1,8 @@
 package com.besysoft.console;
 
+import com.besysoft.repository.person.InMemorySellerRepository;
 import com.besysoft.repository.person.SellerRepository;
+import com.besysoft.repository.product.InMemoryProductRepository;
 import com.besysoft.repository.product.ProductRepository;
 import com.besysoft.service.person.SellerService;
 import com.besysoft.service.product.CategoryService;
@@ -23,8 +25,8 @@ class DataSeederTest {
 
     @BeforeEach
     void setUp() {
-        ProductRepository productRepository = new ProductRepository();
-        SellerRepository sellerRepository = new SellerRepository();
+        ProductRepository productRepository = new InMemoryProductRepository();
+        SellerRepository sellerRepository = new InMemorySellerRepository();
         CategoryService categoryService = new CategoryService();
 
         productService = new ProductService(categoryService, productRepository);

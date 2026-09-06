@@ -45,6 +45,23 @@ public class CheckoutService {
         };
     }
 
+    public Result<CheckoutResult> checkoutBySellerCode(
+            ShoppingCart cart,
+            String sellerCode
+    ) {
+        Result<Sale> saleResult =
+                saleService.registerSaleBySellerCode(cart, sellerCode);
+
+        return switch (saleResult) {
+
+            case IncorrectResult<Sale> incorrect ->
+                    Result.failure(incorrect.error());
+
+            case CorrectResult<Sale> correct ->
+                    processCheckout(correct.value(), cart);
+        };
+    }
+
     private Result<CheckoutResult> processCheckout(
             Sale sale,
             ShoppingCart cart

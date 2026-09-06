@@ -1,69 +1,18 @@
 package com.besysoft.repository.product;
 
-
 import com.besysoft.common.result.Result;
 import com.besysoft.model.product.Category;
 import com.besysoft.model.product.Product;
+import com.besysoft.repository.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-public class ProductRepository {
+public interface ProductRepository extends Repository<Product, UUID> {
 
-    private final Map<UUID, Product> products = new HashMap<>();
+    Result<Product> findByCode(String code);
 
-    public Product save(Product product) {
-        products.put(product.productId(), product);
-        return product;
-    }
+    Result<Product> delete(UUID id);
 
-    public Result<Product> findById(UUID id) {
-        Product product = products.get(id);
-        if (product == null) {
-            return Result.failure(
-                    "No se encontró un producto con este id."
-            );
-        }
-        return Result.success(product);
-    }
-
-    public Result<Product> findByCode(String code) {
-        for (Product product : products.values()) {
-            if (product.code().equalsIgnoreCase(code)) {
-                return Result.success(product);
-            }
-        }
-
-        return Result.failure(
-                "No se encontró un producto con el código: " + code
-        );
-    }
-
-    public List<Product> findAll() {
-        return List.copyOf(products.values());
-    }
-
-    public Result<Product> delete(UUID id) {
-        Product removed = products.remove(id);
-        if (removed == null) {
-            return Result.failure(
-                    "No se encontró un producto con el id: " + id
-            );
-        }
-
-        return Result.success(removed);
-    }
-
-    public List<Product> findByCategory(Category category) {
-        List<Product> result = new ArrayList<>();
-        for (Product product : products.values()) {
-            if (product.category() == category) {
-                result.add(product);
-            }
-        }
-        return List.copyOf(result);
-    }
+    List<Product> findByCategory(Category category);
 }

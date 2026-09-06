@@ -9,8 +9,11 @@ import com.besysoft.model.person.Seller;
 import com.besysoft.model.product.Category;
 import com.besysoft.model.product.Product;
 import com.besysoft.model.sale.Sale;
+import com.besysoft.repository.person.InMemorySellerRepository;
 import com.besysoft.repository.person.SellerRepository;
+import com.besysoft.repository.product.InMemoryProductRepository;
 import com.besysoft.repository.product.ProductRepository;
+import com.besysoft.repository.sale.InMemorySaleRepository;
 import com.besysoft.repository.sale.SaleRepository;
 import com.besysoft.service.cart.ShoppingCartService;
 import com.besysoft.service.checkout.CheckoutService;
@@ -53,9 +56,9 @@ class ServiceTest {
 
     @BeforeEach
     void setUp() {
-        productRepository = new ProductRepository();
-        sellerRepository = new SellerRepository();
-        saleRepository = new SaleRepository();
+        productRepository = new InMemoryProductRepository();
+        sellerRepository = new InMemorySellerRepository();
+        saleRepository = new InMemorySaleRepository();
         categoryService = new CategoryService();
         productService = new ProductService(categoryService, productRepository);
         sellerService = new SellerService(sellerRepository);

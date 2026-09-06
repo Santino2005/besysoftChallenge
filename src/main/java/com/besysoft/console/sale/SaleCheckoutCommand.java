@@ -25,8 +25,11 @@ public class SaleCheckoutCommand implements Runnable {
     private final CheckoutService checkoutService;
     private final ShoppingCart cart;
 
-    @Option(names = {"--seller-id"}, required = true, description = "ID del vendedor (UUID)")
+    @Option(names = {"--seller-id"}, description = "ID del vendedor (UUID)")
     private UUID sellerId;
+
+    @Option(names = {"-s", "--seller-code", "--code"}, description = "Código del vendedor")
+    private String sellerCode;
 
     public SaleCheckoutCommand(CheckoutService checkoutService, ShoppingCart cart) {
         this.checkoutService = checkoutService;
@@ -35,8 +38,15 @@ public class SaleCheckoutCommand implements Runnable {
 
     @Override
     public void run() {
+        if (sellerCode == null && sellerId == null) {
+            System.out.println("Debe especificar el ID (--seller-id) o el código (--code / --seller-code) del vendedor.");
+            return;
+        }
+
         try {
-            Result<CheckoutResult> result = checkoutService.checkout(cart, sellerId);
+            Result<CheckoutResult> result = (sellerCode != null)
+                    ? checkoutService.checkoutBySellerCode(cart, sellerCode)
+                    : checkoutService.checkout(cart, sellerId);
             switch (result) {
                 case IncorrectResult<CheckoutResult> incorrect ->
                         System.out.println("Error en el checkout: " + incorrect.error());

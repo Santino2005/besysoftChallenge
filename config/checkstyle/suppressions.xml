@@ -19,5 +19,6 @@
     <suppress checks="MethodLength" files="ShoppingCartService\.java"/>
     <suppress checks="MethodLength" files="CheckoutService\.java"/>
     <suppress checks="MethodLength" files="DataSeeder\.java"/>
+    <suppress checks="MethodLength" files=".*Repository.*\.java"/>
     <suppress checks="ParameterNumber" files="Main\.java"/>
 </suppressions>

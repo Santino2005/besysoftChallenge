@@ -204,6 +204,46 @@ class ApplicationTest {
     }
 
     @Test
+    void testCartAddByCode() {
+        app.run(new String[]{"cart", "add", "--code", "PROD-002", "-q", "2"});
+        assertTrue(getAndResetOutput().contains("Producto agregado al carrito exitosamente."));
+
+        app.run(new String[]{"cart", "add", "-c", "NON_EXISTENT", "-q", "1"});
+        assertTrue(getAndResetOutput().contains("No se encontró un producto con el código"));
+
+        app.run(new String[]{"cart", "add", "-q", "1"});
+        assertTrue(getAndResetOutput().contains("Debe especificar el ID"));
+
+        app.run(new String[]{"cart", "clear"});
+        getAndResetOutput();
+    }
+
+    @Test
+    void testCheckoutAndCommissionBySellerCode() {
+        app.run(new String[]{"cart", "add", "-c", "PROD-001", "-q", "1"});
+        getAndResetOutput();
+
+        // Checkout por codigo
+        app.run(new String[]{"sale", "checkout", "--code", "VEN-001"});
+        String checkoutOut = getAndResetOutput();
+        assertTrue(checkoutOut.contains("VENTA REGISTRADA EXITOSAMENTE"));
+        assertTrue(checkoutOut.contains("Carlos Gomez"));
+
+        // Comision por codigo
+        app.run(new String[]{"commission", "calculate", "-s", "VEN-001"});
+        String commOut = getAndResetOutput();
+        assertTrue(commOut.contains("CÁLCULO DE COMISIÓN"));
+        assertTrue(commOut.contains("Carlos Gomez"));
+
+        // Validaciones de error
+        app.run(new String[]{"sale", "checkout"});
+        assertTrue(getAndResetOutput().contains("Debe especificar el ID"));
+
+        app.run(new String[]{"commission", "calculate"});
+        assertTrue(getAndResetOutput().contains("Debe especificar el ID"));
+    }
+
+    @Test
     void testSplitArgsWithQuotes() {
         var tokens = Application.splitArgs("product create --code P001 --name \"Coca Cola\" --price 1500 --category FOOD");
         org.junit.jupiter.api.Assertions.assertEquals(10, tokens.size());
