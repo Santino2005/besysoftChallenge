@@ -108,6 +108,9 @@ public class Main {
             CommissionCalculator commissionCalculator,
             ShoppingCart currentCart
     ) {
+        DataSeeder dataSeeder = new DataSeeder(productService, sellerService);
+        dataSeeder.seed();
+
         CommandLine.IFactory factory = new CommandLine.IFactory() {
             @Override
             @SuppressWarnings("unchecked")
@@ -174,6 +177,10 @@ public class Main {
                 // Commission subcommands
                 if (cls == CommissionCalculateCommand.class) {
                     return (K) new CommissionCalculateCommand(sellerService, saleService, commissionCalculator);
+                }
+
+                if (cls == SeedCommand.class) {
+                    return (K) new SeedCommand(dataSeeder);
                 }
 
                 return CommandLine.defaultFactory().create(cls);
